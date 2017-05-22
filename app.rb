@@ -1,12 +1,3 @@
-require 'sinatra'
-require 'sinatra/activerecord'
-require 'json'
-
-set :database, 'sqlite3:googlebooks.sqlite3'
-set :sessions, true
-
-require './models'
-
 get '/' do
     redirect '/search' if session[:user_id]
     erb :index
