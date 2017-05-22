@@ -4,6 +4,7 @@ function BookSearch() {
     var searchInput = document.getElementsByClassName('search-google-books-api__input')[0];
     var searchBtn = document.getElementsByClassName('search-google-books-api__btn')[0];
     var resultsContainer = document.getElementsByClassName('search-results__container')[0];
+    var savedBooksContainer = document.getElementsByClassName('saved-books__container')[0];
 
     searchInput.addEventListener("keyup", function(event) {
         if (event.keyCode === 13) {
@@ -18,6 +19,7 @@ function BookSearch() {
     });
 
     searchInput.focus();
+    retrieveUserBooks();
 
     function googleBooksAjaxReq(search_term) {
         $.ajax({
@@ -36,16 +38,18 @@ function BookSearch() {
 
     function listTitles(items) {
         for (let k = 0; k < items.length; k++) {
-            var item = items[k];
+            let item = items[k];
             // var newDiv = document.createElement("div");
             // newDiv.classList.add("result__container");
 
-            var titleDiv = document.createElement("div");
+            let titleDiv = document.createElement("div");
             titleDiv.classList.add("result__title")
             titleDiv.innerHTML = item.volumeInfo.title;
 
-            titleDiv.addEventListener("click", function() {
-                saveBookToDb(item);
+            resultsContainer.append(titleDiv);
+
+            titleDiv.addEventListener("click", function(event) {
+                saveBookToDb(item, titleDiv);
             });
             //
             // var authorsDiv = document.createElement("div");
@@ -54,12 +58,17 @@ function BookSearch() {
             // for (var j = 0; j < )
             // authorsDiv.innerHTML = item.volumeInfo.;
 
-            resultsContainer.append(titleDiv);
 
         }
     }
 
-    function saveBookToDb(item) {
+    function showSavedResult(element) {
+        element.classList.remove("result__title");
+        element.classList.add("result__title--saved");
+        retrieveUserBooks();
+    }
+
+    function saveBookToDb(item, element) {
         $.ajax({
             url: "http://localhost:9292/create_book",
             method: "POST",
@@ -68,9 +77,30 @@ function BookSearch() {
             },
             success: function() {
                 console.log("Book " + item.volumeInfo.title + " added to database.");
+                showSavedResult(element);
             }
         });
     }
 
+    function retrieveUserBooks() {
+        $.ajax({
+            url: "http://localhost:9292/books",
+            method: "GET",
+            dataType: "json",
+            success: function(response) {
+                displayBooks(response);
+            }
+        });
+    }
+
+    function displayBooks(json) {
+        savedBooksContainer.innerHTML = "";
+        for (var k = 0; k < json.length; k++) {
+            var bookDiv = document.createElement("div");
+            bookDiv.innerHTML = json[k].title;
+
+            savedBooksContainer.append(bookDiv);
+        }
+    }
 
 }
