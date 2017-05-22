@@ -1,3 +1,7 @@
+before do
+    @user = User.find(session[:user_id]) if session[:user_id]
+end
+
 get '/' do
     redirect '/search' if session[:user_id]
     erb :index
@@ -25,4 +29,8 @@ end
 post '/sign_out' do
     session[:user_id] = nil
     redirect '/'
+end
+
+post '/create_book' do
+    Book.create(title: params[:title], user_id: @user.id)
 end

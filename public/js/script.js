@@ -43,6 +43,10 @@ function BookSearch() {
             var titleDiv = document.createElement("div");
             titleDiv.classList.add("result__title")
             titleDiv.innerHTML = item.volumeInfo.title;
+
+            titleDiv.addEventListener("click", function() {
+                saveBookToDb(item)
+            });
             //
             // var authorsDiv = document.createElement("div");
             // authorsDiv.classList.add("result__authors");
@@ -53,8 +57,19 @@ function BookSearch() {
             resultsContainer.append(titleDiv);
 
         }
+    }
 
-
+    function saveBookToDb(item) {
+        $.ajax({
+            url: "/create_book",
+            method: "POST",
+            data: {
+                title: item.volumeInfo.title
+            },
+            success: function() {
+                console.log("success");
+            }
+        });
     }
 
 
