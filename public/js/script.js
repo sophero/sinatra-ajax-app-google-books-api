@@ -45,7 +45,7 @@ function BookSearch() {
             titleDiv.innerHTML = item.volumeInfo.title;
 
             titleDiv.addEventListener("click", function() {
-                saveBookToDb(item)
+                saveBookToDb(item);
             });
             //
             // var authorsDiv = document.createElement("div");
@@ -61,13 +61,13 @@ function BookSearch() {
 
     function saveBookToDb(item) {
         $.ajax({
-            url: "/create_book",
+            url: "http://localhost:9292/create_book",
             method: "POST",
             data: {
                 title: item.volumeInfo.title
             },
             success: function() {
-                console.log("success");
+                console.log("Book " + item.volumeInfo.title + " added to database.");
             }
         });
     }
