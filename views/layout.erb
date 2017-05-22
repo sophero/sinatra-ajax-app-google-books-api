@@ -3,5 +3,12 @@
 </head>
 
 <body>
+
+    <% if session[:user_id] %>
+        <form class="logout-form" action="/sign_out" method="post">
+            <input type="submit" value="Logout">
+        </form>
+    <% end %>
+
     <%= yield %>
 </body>
