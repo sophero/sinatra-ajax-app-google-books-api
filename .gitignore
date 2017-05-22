@@ -1,0 +1,4 @@
+googlebooks.sqlite3
+.sass-cache
+public/css
+Gemfile.lock

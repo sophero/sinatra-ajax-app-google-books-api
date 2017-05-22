@@ -1,0 +1,15 @@
+Build a Sinatra application that renders a sign up/in page. Once a user is signed in/up, they should be taken to a page that has a search bar. This search bar should send an API call to the Google Books api at the endpoint https://www.googleapis.com/books/v1/volumes.
+
+This endpoint takes one argument: q, which accepts a search term, like so: 
+
+q: “Dune”
+
+Once the AJAX call is complete, it should render the list of titles that is returned from the API call. If a user clicks one of the titles, it will be added to the database as a book that belongs to that user. However, instead of changing routes, send an AJAX request to your local Sinatra application that saves the book to the database. Do not redirect the user. When the request is complete, there should be some sort of visual indication that the title has been added to the database(for instance, the text turns green).
+ Then, create a page where a user can view all of his or her books. However, instead of changing routes, send an AJAX request to the books route to get all of that user’s books and return them as json. Use this code as an example: 
+
+get '/books' do
+	books = Book.where(user_id: session[:user_id])
+	books.to_json
+end
+
+You will need to install the ‘json’ gem and require ‘json’ at the top of your Sinatra app file.
