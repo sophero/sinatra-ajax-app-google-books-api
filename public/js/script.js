@@ -37,6 +37,8 @@ function BookSearch() {
     }
 
     function listTitles(items) {
+        resultsContainer.innerHTML = "";
+
         for (let k = 0; k < items.length; k++) {
             let item = items[k];
             // var newDiv = document.createElement("div");
@@ -46,18 +48,16 @@ function BookSearch() {
             titleDiv.classList.add("result__title")
             titleDiv.innerHTML = item.volumeInfo.title;
 
-            resultsContainer.append(titleDiv);
-
             titleDiv.addEventListener("click", function(event) {
                 saveBookToDb(item, titleDiv);
             });
+            resultsContainer.append(titleDiv);
             //
             // var authorsDiv = document.createElement("div");
             // authorsDiv.classList.add("result__authors");
             // var authorsArray = item.
             // for (var j = 0; j < )
             // authorsDiv.innerHTML = item.volumeInfo.;
-
 
         }
     }
@@ -70,7 +70,7 @@ function BookSearch() {
 
     function saveBookToDb(item, element) {
         $.ajax({
-            url: "http://localhost:9292/create_book",
+            url: "/create_book",
             method: "POST",
             data: {
                 title: item.volumeInfo.title
@@ -84,7 +84,7 @@ function BookSearch() {
 
     function retrieveUserBooks() {
         $.ajax({
-            url: "http://localhost:9292/books",
+            url: "/books",
             method: "GET",
             dataType: "json",
             success: function(response) {
